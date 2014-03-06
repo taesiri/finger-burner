@@ -8,8 +8,11 @@ namespace Assets.Scripts
         private float _lastTime;
         private bool _isStarted;
 
+
+        private Color _oldMAttColor;
         private void Start()
         {
+            _oldMAttColor = renderer.material.color;
         }
 
         private void Update()
@@ -57,7 +60,7 @@ namespace Assets.Scripts
             IsDown = false;
             _isStarted = false;
             Debug.Log("Button Pushed Up");
-            renderer.material.color = Color.red;
+            renderer.material.color = _oldMAttColor;
         }
 
         public void ForceOnButtonUp()
