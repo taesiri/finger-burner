@@ -28,7 +28,7 @@ namespace Assets.Scripts
             // At this stage we are not going to handle peoples with more than 10 fingers
 
             var tCount = Input.touchCount;
-            if (tCount > 0 && tCount <= 10)
+            if (tCount > 0 && tCount <= TotalNumberOfFingers)
             {
                 for (int i = 0; i < tCount; i++)
                 {
