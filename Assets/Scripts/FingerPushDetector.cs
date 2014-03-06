@@ -26,7 +26,7 @@ namespace Assets.Scripts
             {
                 for (int i = 0; i < tCount; i++)
                 {
-                    Debug.Log(Input.touches[i].phase);
+                    //Debug.Log(Input.touches[i].phase);
 
                     Ray ray = Camera.main.ScreenPointToRay(Input.touches[i].position);
                     RaycastHit hit;

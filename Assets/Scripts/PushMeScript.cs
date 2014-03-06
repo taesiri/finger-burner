@@ -6,7 +6,7 @@ namespace Assets.Scripts
     {
         public bool IsDown = false;
         private float _lastTime;
-        private bool _isStarted = false;
+        private bool _isStarted;
 
         private void Start()
         {
@@ -21,7 +21,7 @@ namespace Assets.Scripts
                     if (Time.time - _lastTime > 0.1f)
 
                     {
-                        OnButtonUp();
+                        ForceOnButtonUp();
                         _isStarted = false;
                     }
                 }
@@ -31,7 +31,7 @@ namespace Assets.Scripts
 
         public void OnButtonStays()
         {
-            Debug.Log("Stays");
+            //Debug.Log("Stays");
             if (IsDown)
             {
                 _isStarted = true;
@@ -55,6 +55,7 @@ namespace Assets.Scripts
         public void OnButtonUp()
         {
             IsDown = false;
+            _isStarted = false;
             Debug.Log("Button Pushed Up");
             renderer.material.color = Color.red;
         }
