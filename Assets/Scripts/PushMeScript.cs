@@ -57,11 +57,11 @@ namespace Assets.Scripts
 
                     break;
                 case PushMeState.GoOnFire:
-                    renderer.material.color = new Color(OnFireCurve.Evaluate(Time.time), 0, 1);
-                    break;
+					renderer.material.SetColor("_Color", new Color(OnFireCurve.Evaluate(Time.time),0,1));
+				    break;
                 case PushMeState.GoOnIce:
-                    renderer.material.color = new Color(OnIceCurve.Evaluate(Time.time), 0, 1);
-                    break;
+					renderer.material.SetColor("_Color", new Color(OnIceCurve.Evaluate(Time.time),0,1));
+				break;
             }
         }
 
