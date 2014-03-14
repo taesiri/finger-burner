@@ -8,7 +8,7 @@ namespace Assets.Scripts
     public class CoreGameplayManager : MonoBehaviour
     {
         public GUISkin ContentSkin;
-        public PushMeScript[] Listeners;
+        public FingerSlotScript[] Listeners;
         public float TimeInterval = 1.0f;
         public Random CoreGenerator = new Random(DateTime.Now.Millisecond);
         private float _lastTick;
@@ -38,7 +38,7 @@ namespace Assets.Scripts
                     _lastTick = Time.time;
 
                     var itemInex = CoreGenerator.Next(0, _len);
-                    Listeners[itemInex].ChangeButtonSateWithDelay(PushMeState.GoOnFire, 2.0f);
+                    Listeners[itemInex].ChangeButtonSateWithDelay(FingerState.GoOnFire, 2.0f);
                     Debug.Log(string.Format("Buttons Goes on fire - id:{0}", itemInex));
                 }
                 else
@@ -55,7 +55,7 @@ namespace Assets.Scripts
 
         public void OnFingerTouchesButtonBegan(GameEvent gevent, GameObject sender)
         {
-            var script = sender.GetComponent<PushMeScript>();
+            var script = sender.GetComponent<FingerSlotScript>();
 
             if (script)
             {
@@ -70,7 +70,7 @@ namespace Assets.Scripts
 
         public void OnFingerTouchesButtonCanceled(GameEvent gevent, GameObject sender)
         {
-            var script = sender.GetComponent<PushMeScript>();
+            var script = sender.GetComponent<FingerSlotScript>();
 
             if (script)
             {
@@ -84,7 +84,7 @@ namespace Assets.Scripts
 
         public void OnFingerTouchesButtonStays(GameEvent gevent, GameObject sender)
         {
-            var script = sender.GetComponent<PushMeScript>();
+            var script = sender.GetComponent<FingerSlotScript>();
 
             if (script)
             {
@@ -98,7 +98,7 @@ namespace Assets.Scripts
 
         public void OnFingerTouchesButtonEnd(GameEvent gevent, GameObject sender)
         {
-            var script = sender.GetComponent<PushMeScript>();
+            var script = sender.GetComponent<FingerSlotScript>();
 
             if (script)
             {
