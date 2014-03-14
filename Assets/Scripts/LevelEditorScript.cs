@@ -16,15 +16,21 @@ namespace Assets.Scripts
 
         private List<FingerSlotScript> _listOfFinger = new List<FingerSlotScript>();
 
+        public string[] ToolbarStrings = {"Additive Mode", "Delete Mode", "Movement"};
+        public int ToolbarInt = 0;
+
+
         public enum EditorMode
         {
             GameMode = 0,
-            EditMode = 1
+            AdditiveMode = 1,
+            DeleteMode = 2,
+            Movement = 3
         }
 
         private void Start()
         {
-            SceneMode = EditorMode.EditMode;
+            SceneMode = EditorMode.AdditiveMode;
             if (!GameManger)
             {
                 Debug.LogError("No Game Manager Attached");
@@ -33,32 +39,39 @@ namespace Assets.Scripts
 
         private void Update()
         {
-            if (SceneMode == EditorMode.EditMode)
+            if (SceneMode != EditorMode.GameMode)
             {
 #if UNITY_ANDROID || UNITY_IPHONE
 
-                if (_totalFingers <= TotalNumberOfFingers)
+                //Prevents touches through gui elements
+                if (GUIUtility.hotControl == 0)
                 {
-                    var tCount = Input.touchCount;
-                    if (tCount > 0 && tCount <= TotalNumberOfFingers)
+                    if (_totalFingers < TotalNumberOfFingers)
                     {
-                        for (int i = 0; i < tCount; i++)
+                        var tCount = Input.touchCount;
+                        if (tCount > 0 && tCount <= TotalNumberOfFingers)
                         {
-                            Ray ray = Camera.main.ScreenPointToRay(Input.touches[i].position);
-                            RaycastHit hit;
-                            if (Physics.Raycast(ray, out hit))
+                            for (int i = 0; i < tCount; i++)
                             {
-                                if (hit.collider.gameObject.tag == "BackPlane")
+                                Ray ray = Camera.main.ScreenPointToRay(Input.touches[i].position);
+                                RaycastHit hit;
+                                if (Physics.Raycast(ray, out hit))
                                 {
-                                    CreateFingerSlot(new Vector3(hit.point.x, hit.point.y, 8));
+                                    if (SceneMode == EditorMode.AdditiveMode)
+                                    {
+                                        if (hit.collider.gameObject.tag == "BackPlane")
+                                        {
+                                            CreateFingerSlot(new Vector3(hit.point.x, hit.point.y, 8));
+                                        }
+                                    }
                                 }
                             }
                         }
                     }
-                }
-                else
-                {
-                    Debug.Log(" No More Fingers Allowed!");
+                    else
+                    {
+                        Debug.Log(" No More Fingers Allowed!");
+                    }
                 }
 #endif
             }
@@ -66,7 +79,6 @@ namespace Assets.Scripts
 
         private void CreateFingerSlot(Vector3 position)
         {
-            //z = 8
             _totalFingers++;
             var newObject = Instantiate(RingSlot, position, Quaternion.identity) as GameObject;
             if (newObject != null)
@@ -88,27 +100,65 @@ namespace Assets.Scripts
             GameManger.gameObject.SetActive(true);
         }
 
+        private void ClearScreen()
+        {
+            for (int i = 0; i < _listOfFinger.Count; i++)
+            {
+                Destroy(_listOfFinger[i]);
+                _listOfFinger.Clear();
+                _totalFingers = 0;
+            }
+        }
+
         private void OnGUI()
         {
             GUI.Label(new Rect(10, 80, 300, 50), string.Format("Fingers : {0}", _totalFingers), MenuSkin.label);
 
-            if (SceneMode == EditorMode.EditMode)
+            if (SceneMode != EditorMode.GameMode)
             {
-                if (GUI.Button(new Rect(10, 10, 200, 50), "Play Game"))
+                if (GUI.Button(new Rect(Screen.width - 220, 10, 200, 70), "Play Game", MenuSkin.button))
                 {
-                    SceneMode = EditorMode.GameMode;
+                    if (_totalFingers > 0)
+                    {
+                        SceneMode = EditorMode.GameMode;
+                        ReadyforPlayMode();
+                    }
+                }
 
-                    ReadyforPlayMode();
+                ToolbarInt = GUI.Toolbar(new Rect(15, Screen.height - 100, 600, 60), ToolbarInt, ToolbarStrings, MenuSkin.button);
+
+                UpdateSceneMode(ToolbarInt);
+
+
+                if (GUI.Button(new Rect(Screen.width - 200, Screen.height - 100, 180, 60), "Clear Screen", MenuSkin.button))
+                {
+                    ClearScreen();
                 }
             }
             else if (SceneMode == EditorMode.GameMode)
             {
-                if (GUI.Button(new Rect(10, 10, 200, 50), "Edit Mode"))
+                if (GUI.Button(new Rect(10, 145, 200, 70), "Edit Mode", MenuSkin.button))
                 {
-                    SceneMode = EditorMode.EditMode;
+                    SceneMode = EditorMode.AdditiveMode;
 
                     GameManger.gameObject.SetActive(false);
                 }
+            }
+        }
+
+        private void UpdateSceneMode(int id)
+        {
+            switch (id)
+            {
+                case 0:
+                    SceneMode = EditorMode.AdditiveMode;
+                    break;
+                case 1:
+                    SceneMode = EditorMode.DeleteMode;
+                    break;
+                case 2:
+                    SceneMode = EditorMode.Movement;
+                    break;
             }
         }
     }
