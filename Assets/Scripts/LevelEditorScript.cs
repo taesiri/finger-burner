@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using System.Security.Cryptography;
 using UnityEngine;
 
 namespace Assets.Scripts
@@ -62,6 +63,14 @@ namespace Assets.Scripts
                                         if (hit.collider.gameObject.tag == "BackPlane")
                                         {
                                             CreateFingerSlot(new Vector3(hit.point.x, hit.point.y, 8));
+                                        }
+                                    }
+                                    else if (SceneMode == EditorMode.DeleteMode)
+                                    {
+                                        if (hit.collider.gameObject.tag == "PushMe")
+                                        {
+                                            Destroy(hit.collider.gameObject);
+                                            _totalFingers--;
                                         }
                                     }
                                 }
