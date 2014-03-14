@@ -104,10 +104,10 @@ namespace Assets.Scripts
         {
             for (int i = 0; i < _listOfFinger.Count; i++)
             {
-                Destroy(_listOfFinger[i]);
-                _listOfFinger.Clear();
-                _totalFingers = 0;
+                Destroy(_listOfFinger[i].gameObject);
             }
+            _listOfFinger.Clear();
+            _totalFingers = 0;
         }
 
         private void OnGUI()
@@ -116,28 +116,27 @@ namespace Assets.Scripts
 
             if (SceneMode != EditorMode.GameMode)
             {
-                if (GUI.Button(new Rect(Screen.width - 220, 10, 200, 70), "Play Game", MenuSkin.button))
-                {
-                    if (_totalFingers > 0)
-                    {
-                        SceneMode = EditorMode.GameMode;
-                        ReadyforPlayMode();
-                    }
-                }
-
                 ToolbarInt = GUI.Toolbar(new Rect(15, Screen.height - 100, 600, 60), ToolbarInt, ToolbarStrings, MenuSkin.button);
-
                 UpdateSceneMode(ToolbarInt);
-
 
                 if (GUI.Button(new Rect(Screen.width - 200, Screen.height - 100, 180, 60), "Clear Screen", MenuSkin.button))
                 {
                     ClearScreen();
                 }
+
+                if (GUI.Button(new Rect(Screen.width - 220, 10, 200, 70), "Play Game", MenuSkin.button))
+                {
+                    if (_totalFingers > 0)
+                    {
+                        ReadyforPlayMode();
+                        SceneMode = EditorMode.GameMode;
+                    }
+                }
             }
             else if (SceneMode == EditorMode.GameMode)
             {
-                if (GUI.Button(new Rect(10, 145, 200, 70), "Edit Mode", MenuSkin.button))
+                Debug.Log("InGameMode");
+                if (GUI.Button(new Rect(Screen.width - 220, 10, 200, 70), "Edit Mode", MenuSkin.button))
                 {
                     SceneMode = EditorMode.AdditiveMode;
 
