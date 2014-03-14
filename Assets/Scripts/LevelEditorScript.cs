@@ -70,7 +70,11 @@ namespace Assets.Scripts
             _totalFingers++;
             var newObject = Instantiate(RingSlot, position, Quaternion.identity) as GameObject;
             if (newObject != null)
-                _listOfFinger.Add(newObject.GetComponent<FingerSlotScript>());
+            {
+                var fscripot = newObject.GetComponent<FingerSlotScript>();
+                fscripot.Mother = GameManger;
+                _listOfFinger.Add(fscripot);
+            }
         }
 
         private void ReadyforPlayMode()
