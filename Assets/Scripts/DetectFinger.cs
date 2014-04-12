@@ -10,7 +10,6 @@ namespace Assets.Scripts
 
         private int _lastTocuhcounts = 0;
 
-
         private void Start()
         {
             _fingerCollection = new GameObject[TotalNumberOfFingers];
